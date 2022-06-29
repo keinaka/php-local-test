@@ -1,6 +1,9 @@
 <?php
 include('./lib/login.php');
-include('./lib/product.php');
+if($_POST["product_id"]){
+  $_SESSION["cart_items"][] = $_POST["product_id"];
+}
+$added_items = $_SESSION["cart_items"];
 ?>
 
 <!DOCTYPE html>
@@ -8,7 +11,7 @@ include('./lib/product.php');
 
 <head>
   <meta charset="utf-8">
-  <title>Welcome to My Shop | <?php print($title) ?></title>
+  <title>Welcome to My Shop | Cart</title>
   <meta name="keyword" content="test-page" />
   <meta name="description" content="Lorem ipsum dolor sit amet" />
 </head>
@@ -33,21 +36,19 @@ include('./lib/product.php');
         </ul>
       </div>
       <div id="content" data-trackable="content" style="float: right; width: 80%">
-        <h2><?php print($title) ?></h2>
-        <p><?php print($description) ?></p>
-        <?php
-        if($image){
-            print('<img src="' . $image . '" />');
-        }
-        if($price){
-            print('<div>Price: ' . $price . '</div>');
-            print('
-            <form name="cart" id="cart" action="/cart.php" method="POST">
-                <input type="hidden" name="product_id" value="' . $_GET["product"] . '" />
-                <input type="submit" name="add_to_cart" id="add_to_cart" value="Add to Cart" />
-            </form>');
-        }
-        ?>
+        <h2>Cart</h2>
+<table>
+  <tr><th>Item</th></tr>
+<?php
+foreach($_SESSION["cart_items"] as $item){
+  print('<tr><td>' . $item . '</td></tr>');
+}
+?>
+</table>
+<form method="POST" action="/checkout.php">
+  <input type="submit" name="checkout" id="checkout" value="Checkout" />
+</form>
+
       </div>
     </div>
     <footer id="footer" data-trackable="footer" style="clear: both;">
